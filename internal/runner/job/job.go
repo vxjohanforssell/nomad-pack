@@ -141,8 +141,14 @@ func (r *Runner) Deploy(ui terminal.UI, errorContext *errors.UIErrorContext) *er
 		}
 
 		r.deployedJobs = append(r.deployedJobs, jobSpec)
-		ui.Info(fmt.Sprintf("Job '%s' in pack deployment '%s' registered successfully",
-			*jobSpec.Job().ID, r.runnerCfg.DeploymentName))
+
+		var namespaceNomad = *jobSpec.original.Namespace
+		if namespaceNomad == "" {
+			namespaceNomad = "default"
+		}
+
+		ui.Info(fmt.Sprintf("Job '%s' in pack deployment '%s' registered successfully for namespace '%s'",
+			*jobSpec.Job().ID, r.runnerCfg.DeploymentName, namespaceNomad))
 	}
 
 	return nil
